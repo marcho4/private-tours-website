@@ -1,9 +1,11 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display  } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
 import NavigationBar from "./elements/NavigationBar";
+import Calen from "./elements/Calen";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -33,7 +35,7 @@ const labGrotesque = localFont({
 
 
 export const metadata: Metadata = {
-  title: "Наталья Дергилёва",
+  title: "Наталья Дергилёва - Экскурсии по Москве",
   description: "Гид по Москве",
 };
 
@@ -48,7 +50,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       
-      <body className={`scroll-smooth ${playfairDisplay.variable} ${labGrotesque.variable} antialiased`}>
+      <body className={`scroll-smooth ${playfairDisplay.variable} ${labGrotesque.variable} antialiased bg-zinc-100`}>
         {children}
       </body>
     </html>

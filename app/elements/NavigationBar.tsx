@@ -10,20 +10,20 @@ export default function NavigationBar() {
   const mobile = useIsMobile();
 
   return (
-    <div className="fixed top-5 z-[40] flex flex-row w-full mx-auto max-w-5xl h-fit p-2 justify-between items-center mix-blend-exclusion">
+    <div className="fixed top-0 sm:top-5 z-[40] bg-blend-color-burn flex-row w-full mx-auto max-w-5xl h-fit p-2 justify-between items-center mix-blend-exclusion hidden sm:flex">
         <Link href="/" className="text-xl sm:text-2xl font-bold text-white">
           Наталья Дергилёва
         </Link>
         {!mobile ? (
           <div className="flex flex-row gap-5">
-            <Link href="#about" className="hover:underline text-white">
+            <Link href="#skills" className="hover:underline text-white font-semibold sm:text-lg">
               обо мне
             </Link>
-            <Link href="#tours" className="hover:underline text-white">
+            <Link href="#tours" className="hover:underline text-white font-semibold sm:text-lg">
               экскурсии
             </Link>
-            <Link href="#booking" className="hover:underline text-white"> 
-              забронировать
+            <Link href="#reviews" className="hover:underline text-white font-semibold sm:text-lg">
+              отзывы
             </Link>
           </div>
         ) : (
