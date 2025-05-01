@@ -50,7 +50,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant={"default"} className="text-black w-full bg-gradient-to-br from-yellow-200 to-orange-400">Заказать</Button>
+                <Button variant={"default"} className="text-black w-full bg-gradient-to-br from-yellow-400 to-orange-400">Заказать</Button>
             </DialogTrigger>
             <DialogContent className="max-w-[90vw] sm:max-w-2xl max-h-[90vh] overflow-hidden">
                 <DialogHeader className="pb-2">
@@ -257,7 +257,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                         </Form>
                     </div>
                     <DialogFooter className="pb-5 max-w-[90vh] px-2 mt-2">
-                        <Button type="button" className="text-black bg-gradient-to-br from-yellow-200 to-orange-400" onClick={form.handleSubmit(onSubmit)}>
+                        <Button type="button" className="text-black bg-gradient-to-br from-yellow-400 to-orange-400" onClick={form.handleSubmit(onSubmit)}>
                             Забронировать
                         </Button>
                     </DialogFooter>
