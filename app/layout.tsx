@@ -1,11 +1,9 @@
-
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display  } from "next/font/google";
+import { Playfair_Display  } from "next/font/google";
 import localFont from "next/font/local";
+import Providers from "./providers";
 
 import "./globals.css";
-import NavigationBar from "./elements/NavigationBar";
-import Calen from "./elements/Calen";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -51,7 +49,9 @@ export default function RootLayout({
       </head>
       
       <body className={`scroll-smooth ${playfairDisplay.variable} ${labGrotesque.variable} antialiased bg-zinc-100`}>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

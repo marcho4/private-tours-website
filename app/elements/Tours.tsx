@@ -9,7 +9,9 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+// import { useQuery } from '@tanstack/react-query';
+
 
 const tours: TourCardProps[] = [
     {
@@ -34,11 +36,21 @@ const tours: TourCardProps[] = [
     }
 ]
 
+// const fetchTours = async () => {
+//     const response = await fetch('/api/tours');
+//     return response.json().then(data => data.data);
+// }
+
 export default function Tours() {
-    const [api, setApi] = useState<any>(null);
-    useEffect(() => {
-        if (!api) return;
-    }, [api]);
+    // const { data } = useQuery({
+    //     queryKey: ['tours'],
+    //     queryFn: fetchTours,
+    // });
+
+    // const [api, setApi] = useState<any | null>(null);
+    // useEffect(() => {
+    //     if (!api) return;
+    // }, [api]);
 
     return (
         <div id="tours" className="flex relative flex-col items-center justify-center w-full bg-zinc-100">
@@ -55,7 +67,7 @@ export default function Tours() {
                         loop: true,
                         
                     }}
-                    setApi={setApi}
+                    // setApi={setApi}
                     className="w-full"
                 >
                     <CarouselContent className="h-[72vh] items-stretch">                            

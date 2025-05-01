@@ -4,39 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import {Input} from "@/components/ui/input";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
-import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import {cn} from "@/lib/utils";
-import {date, z} from "zod";
-import {CalendarIcon, Clock, MapPin, UserRound} from "lucide-react";
-import {format} from "date-fns";
-import {Calendar} from "@/components/ui/calendar";
-import {ru} from "date-fns/locale/ru";
-import {Textarea} from "@/components/ui/textarea";
+import { z } from "zod";
+import { Clock, MapPin, UserRound } from "lucide-react";
 import * as React from "react";
-import { useForm } from "react-hook-form"
-import {zodResolver} from "@hookform/resolvers/zod";
 import BookingDialog from "./BookingDialog";
-
 
 
 const formSchema = z.object({
@@ -49,7 +20,9 @@ const formSchema = z.object({
     timeslot: z.string().min(2, { message: "Слот обязателен" }).max(50, { message: "Время должно быть не более 50 символов" }),
     numberOfPeople: z.number().min(1, { message: "Количество людей должно быть не менее 1" }).max(10, { message: "Количество людей должно быть не более 10" }),
     additionalInfo: z.string().min(0, { message: "Дополнительная информация должна быть не менее 0 символов" }).max(500, { message: "Дополнительная информация должна быть не более 500 символов" }),
-})
+});
+
+type FormSchema = z.infer<typeof formSchema>;
 
 
 export interface TourCardProps {
@@ -74,7 +47,7 @@ export default function TourCard({
     TourMaxPeople
 }: TourCardProps) {
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: FormSchema) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)

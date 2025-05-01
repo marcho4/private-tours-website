@@ -1,13 +1,7 @@
 "use client"
 
-import React, { useState } from "react"
-import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-  } from "@/components/ui/hover-card"
+import React from "react"
 import Image from "next/image"
-import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
@@ -34,7 +28,7 @@ export default function Skills() {
                     <div className="font-medium transition-colors duration-300 text-2xl sm:text-3xl px-5 pt-15">
                         Высшее образование
                         <p className="text-lg font-normal pt-2">
-                            Я оконочила университет ОМГУ в 2002 году по специальности "История и культура"
+                            Я оконочила университет ОМГУ в 2002 году по специальности &#34;История и культура&#34;
                         </p>
                     </div>
                     
