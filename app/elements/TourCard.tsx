@@ -9,6 +9,7 @@ import { Clock, MapPin, UserRound } from "lucide-react";
 import * as React from "react";
 import BookingDialog from "./BookingDialog";
 import { UUID } from "crypto";
+import DescriptionDialog from "./DescriptionDialog";
 
 
 const formSchema = z.object({
@@ -99,9 +100,7 @@ export default function TourCard({
                                 {short_description}
                             </p>
                             <div className="flex justify-between">
-                                <Button variant={"link"} size={"sm"} className="p-0 text-yellow-700">
-                                    Подробнее
-                                </Button>
+                                <DescriptionDialog id={id} />
                                 <span className="font-medium md:hidden">
                                     {price} ₽
                                 </span>

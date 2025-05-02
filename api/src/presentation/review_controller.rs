@@ -33,7 +33,7 @@ pub async fn get_all_reviews(
     review_service: ReviewServiceData
 ) -> impl Responder {
     match review_service.get_all_reviews().await {
-        Ok(res) => HttpResponse::Created().json(json!({
+        Ok(res) => HttpResponse::Ok().json(json!({
             "message": "Successfully got all reviews",
             "data": res
         })),

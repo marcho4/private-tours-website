@@ -21,8 +21,6 @@ export default function Skills() {
 
                 <div className="flex flex-col items-stretch md:flex-row">
                     <div className="grid grid-cols-5 md:grid-cols-2 md:w-2/3 relative">
-                        
-                        
                         <div className="col-span-4 md:col-span-1 font-medium transition-colors duration-300 text-2xl sm:text-3xl sm:px-5 pt-15">
                             Высшее образование
                             <p className="text-lg font-normal pt-2">Я оконочила университет ОМГУ в 2002 году по специальности &quot;История и культура&quot;</p>
@@ -78,7 +76,7 @@ export default function Skills() {
 
                         className="mt-15 md:mt-0 md:w-1/3 flex items-center justify-center z-10">
                         <div >
-                            <Image src="/group 7.svg" alt="skills" width={190} height={190} />
+                            <Image src="/group7.svg" alt="skills" width={190} height={190} />
                         </div>
                     </motion.div>
                     

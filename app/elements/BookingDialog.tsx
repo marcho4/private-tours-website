@@ -16,6 +16,9 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns/format";
 import { Calendar } from "@/components/ui/calendar";
 import { ru } from "date-fns/locale";
+import { useQuery } from "@tanstack/react-query";
+import { formatDate } from "date-fns";
+import React, { useEffect } from "react";
 
 const formSchema = z.object({
     tourName: z.string().min(2, { message: "Выбор тура обязателен" }).max(50, { message: "Название тура должно быть не более 50 символов" }),
@@ -31,7 +34,6 @@ const formSchema = z.object({
 
 
 export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<typeof formSchema>) => void}) {
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -46,6 +48,76 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
             additionalInfo: "",
         },
     })
+
+    const selectedDate = form.watch("date");
+
+    useEffect(() => {
+        form.setValue("timeslot", "");
+    }, [selectedDate]);
+
+    const { data: toursData, isPending: isToursPending, error: toursError } = useQuery({
+        queryKey: ['toursBooking'],
+        queryFn: () => fetch('http://localhost:8080/tours')
+            .then((res) => res.json())
+            .then((json) => json.data),
+    });
+
+    function renderTours() {
+        
+        if (isToursPending) return <SelectItem value="loading">Загрузка...</SelectItem>
+        if (toursError) return <SelectItem value="error">Не удалось загрузить туры</SelectItem>
+        if (!Array.isArray(toursData)) return <SelectItem value="none">Нет туров</SelectItem>
+        return toursData.map((tour: any) => (
+            <SelectItem key={tour.id} value={tour.id} className="break-words hyphens-auto max-w-full">
+                {tour.name}
+            </SelectItem>
+        ));
+    }
+
+    const { data: allTimeslotsData, isPending: isAllTimeslotsPending } = useQuery({
+        queryKey: ['timeslots'],
+        queryFn: () => fetch('http://localhost:8080/timeslots')
+            .then((res) => res.json())
+            .then((json) => {
+                console.log("Ответ от /timeslots:", json);
+                return json.data;
+            }),
+    });
+
+    const availableDates = React.useMemo<Set<string>>(() => {
+        if (!Array.isArray(allTimeslotsData)) {
+            console.log("allTimeslotsData is not an array");
+            return new Set();
+        }
+        const datesSet = new Set(
+            allTimeslotsData
+                .filter((slot: any) => slot.reserved === false)
+                .map((slot: any) => slot.day)
+        );
+
+        return datesSet;
+    }, [allTimeslotsData]);
+
+
+    const { data: timeslotsData, isPending: isTimeslotsPending, error: timeslotsError } = useQuery({
+        queryKey: ['timeslots', selectedDate],
+        queryFn: () => fetch(
+            `http://localhost:8080/timeslots?date=${formatDate(selectedDate, 'yyyy-MM-dd')}`
+        ).then((res) => res.json()),
+    });
+
+    function renderTimeslots() {
+       
+    
+        if (isTimeslotsPending) return <SelectItem value="loading">Загрузка...</SelectItem>
+        if (timeslotsError) return <SelectItem value="error">Не удалось загрузить слоты</SelectItem>
+        if (!Array.isArray(timeslotsData.data)) return <SelectItem value="none">Нет слотов</SelectItem>
+        return timeslotsData.data.filter((timeslot: any) => timeslot.reserved === false).map((timeslot: any) => (
+            <SelectItem key={timeslot.id} value={timeslot.id}>
+                {timeslot.time_from.split(":").slice(0, 2).join(":")} - {timeslot.time_to.split(":").slice(0, 2).join(":")}
+            </SelectItem>
+        ));
+    }
     
     return (
         <Dialog>
@@ -54,7 +126,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
             </DialogTrigger>
             <DialogContent className="max-w-[90vw] sm:max-w-2xl max-h-[90vh] overflow-hidden">
                 <DialogHeader className="pb-2">
-                    <DialogTitle className="text-center text-gray-800 text-2xl">Забронировать экскурсию</DialogTitle>
+                    <DialogTitle className="text-center text-gray-800 text-xl sm:text-2xl">Забронировать экскурсию</DialogTitle>
                 </DialogHeader>
                 <div className="">
                     <div className="flex flex-col items-center justify-start sm:py-2 overflow-y-auto
@@ -63,7 +135,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="space-y-4 w-full sm:max-w-2xl">
-                                <div className="flex flex-col sm:flex-row w-full gap-x-4 gap-y-4">
+                                <div className="flex flex-col sm:flex-row w-full gap-x-4 gap-y-4 items-stretch justify-start">
                                     <div className="sm:w-1/2">
                                         <FormField control={form.control} name="tourName" render={({ field }) => (
                                             <FormItem>
@@ -72,14 +144,13 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                                                 </FormLabel>
                                                 <FormControl>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                        <SelectTrigger className="w-full">
-                                                            <SelectValue placeholder="Выберите тур"  {...field}/>
+                                                        <SelectTrigger className="w-full max-w-full min-h-[48px] whitespace-pre-line break-words py-2">
+                                                            <SelectValue placeholder="Выберите тур" {...field} className="whitespace-pre-line break-words py-1" />
                                                         </SelectTrigger>
-                                                        <SelectContent>
+                                                        <SelectContent className="max-w-full">
                                                             <SelectGroup>
                                                                 <SelectLabel>Туры</SelectLabel>
-                                                                <SelectItem value="moscow-tour">По Москве</SelectItem>
-                                                                <SelectItem value="zamoskvorechie-tour">По Замоскворечью</SelectItem>
+                                                                {renderTours()}
                                                             </SelectGroup>
                                                         </SelectContent>
                                                     </Select>
@@ -96,7 +167,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                                                     <FormLabel>
                                                         Количество людей
                                                     </FormLabel>
-                                                    <FormControl>
+                                                    <FormControl className="sm:min-h-[48px] h-full">
                                                         <Input
                                                             type="number"
                                                             onChange={(e) => {
@@ -155,7 +226,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                                                         <Button
                                                             variant={"outline"}
                                                             className={cn(
-                                                                "w-[240px] justify-start text-left font-normal",
+                                                                "w-full justify-start text-left font-normal",
                                                                 !date && "text-muted-foreground"
                                                             )}
                                                         >
@@ -164,15 +235,26 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                                                         </Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent className="w-auto p-0" align="start">
-                                                        <Calendar
+                                                        {isAllTimeslotsPending ? (
+                                                            <div>Загрузка календаря...</div>
+                                                        ) : (
+                                                            <Calendar
                                                             mode="single"
                                                             selected={field.value}
                                                             onSelect={field.onChange}
                                                             disabled={(date) =>
-                                                            date > new Date() || date < new Date("1900-01-01")
+                                                            date < new Date() || date < new Date("1900-01-01")
                                                             }
+                                                            modifiers={{
+                                                                available: (date) => availableDates.has(formatDate(date, 'yyyy-MM-dd')) && date > new Date(),
+                                                            }}
+                                                            modifiersClassNames={{
+                                                                available: "bg-green-100 text-black rounded-md",
+                                                            }}
                                                             locale={ru}
-                                                        />
+                                                            />
+                                                        )}
+                                                        
                                                     </PopoverContent>
                                                 </Popover>
                                                 <FormMessage />
@@ -194,8 +276,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                                                         <SelectContent>
                                                             <SelectGroup>
                                                                 <SelectLabel>Слоты</SelectLabel>
-                                                                <SelectItem value="moscow-tour">14:00 - 16:00</SelectItem>
-                                                                <SelectItem value="zamoskvorechie-tour">16:00 - 18:00</SelectItem>
+                                                                {renderTimeslots()}
                                                             </SelectGroup>
                                                         </SelectContent>
                                                     </Select>
