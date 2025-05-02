@@ -58,7 +58,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
                 </DialogHeader>
                 <div className="">
                     <div className="flex flex-col items-center justify-start sm:py-2 overflow-y-auto
-                                max-w-[90vw] sm:max-w-2xl sm:w-full px-3 max-h-[73vh] sm:max-h-[calc(90vh - 170px)] pb-2">
+                                max-w-[90vw] sm:max-w-2xl sm:w-full px-3 max-h-[70vh] sm:max-h-[calc(90vh - 170px)] pb-2">
                         <Form {...form} >
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}

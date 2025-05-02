@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Clock, MapPin, UserRound } from "lucide-react";
 import * as React from "react";
 import BookingDialog from "./BookingDialog";
+import { UUID } from "crypto";
 
 
 const formSchema = z.object({
@@ -26,26 +27,34 @@ type FormSchema = z.infer<typeof formSchema>;
 
 
 export interface TourCardProps {
-    TourName: string, 
-    TourDescription: string,
-    TourImage: string, 
-    TourPrice: number, 
-    TourDuration: number, 
-    TourLocation: string, 
-    TourRating: number, 
-    TourMaxPeople: number
+    id: UUID,
+    name: string,
+    short_description: string,
+    description: string,
+    price: number,
+    duration: number[],
+    min_persons: number,
+    max_persons: number,
+    meeting_place: string,
+    is_outdoor: boolean,
+    is_for_kids: boolean
 }
 
 export default function TourCard({
-    TourName, 
-    TourDescription, 
-    TourImage, 
-    TourPrice, 
-    TourDuration, 
-    TourLocation,
-    TourRating,
-    TourMaxPeople
+    id,
+    name, 
+    description, 
+    short_description, 
+    price, 
+    duration, 
+    meeting_place,
+    max_persons,
+    min_persons,
+    is_outdoor,
+    is_for_kids
 }: TourCardProps) {
+
+    const hours = duration[0] / 60 / 60;
 
     function onSubmit(values: FormSchema) {
         // Do something with the form values.
@@ -57,7 +66,7 @@ export default function TourCard({
         <Card className="w-full shadow-lg max-w-[95vw] h-full md:h-fit max-h-[69vh] mb-8 mt-5 md:max-h-[65vh] md:max-w-3xl mx-auto gap-y-4">
             <CardHeader className="hidden md:block md:mb-4">
                 <CardTitle id="name" className="text-3xl text-left font-semibold">
-                    {TourName}
+                    {name}
                 </CardTitle>
             </CardHeader>
             <CardContent id="main-content" className="flex flex-col h-full
@@ -65,18 +74,18 @@ export default function TourCard({
              gap-x-4 sm:gap-x-6 sm:gap-y-6 pb-0 px-4 md:pb-6 md:px-6 mb-0">
                 <div id="image" className="w-full md:w-1/2 md:h-full flex items-center justify-center ">
                     <Image 
-                        src={TourImage} 
-                        alt={TourName} 
+                        src={"/moscow.jpg"} 
+                        alt={name} 
                         width={800} 
                         height={600} 
                         className="rounded-lg mb-4 h-[150px] md:h-88 object-cover"
                     />
                 </div>
                 <CardTitle className="text-xl text-left mb-4 sm:mb-0 py-0 md:hidden">
-                    <span className=" inline-flex items-center justify-between w-full gap-2">{TourName} 
+                    <span className=" inline-flex items-center justify-between w-full gap-2">{name} 
                         <div className="flex items-center gap-2 text-sm font-medium">
                                 <span className="text-amber-500">★</span>
-                                <span>{TourRating}/5</span>
+                                <span>4.5/5</span>
                             </div>
                     </span>
                 </CardTitle>
@@ -87,14 +96,14 @@ export default function TourCard({
                                 Описание
                             </div> */}
                             <p className="text-sm md:text-base text-gray-600">
-                                {TourDescription}
+                                {short_description}
                             </p>
                             <div className="flex justify-between">
                                 <Button variant={"link"} size={"sm"} className="p-0 text-yellow-700">
                                     Подробнее
                                 </Button>
                                 <span className="font-medium md:hidden">
-                                    {TourPrice} ₽
+                                    {price} ₽
                                 </span>
                             </div>
                         </div>
@@ -102,26 +111,26 @@ export default function TourCard({
                         <div className="grid-cols-2 gap-4 mt-4 hidden md:grid">
                             <div className="flex items-center gap-2">
                                 <span className="text-lg font-medium">
-                                    {TourPrice} ₽
+                                    {price} ₽
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-amber-500">★</span>
-                                <span>{TourRating}/5</span>
+                                <span>4.5/5</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-gray-600 inline-flex items-center gap-2">
-                                    <Clock className="w-4 h-4"/> {TourDuration} часа
+                                    <Clock className="w-4 h-4"/> {hours} часа
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-gray-600 inline-flex items-center gap-2">
-                                    <UserRound className="w-4 h-4"/> До {TourMaxPeople} чел.
+                                    <UserRound className="w-4 h-4"/> От {min_persons} до {max_persons} чел.
                                 </span>
                             </div>
                             <div className="mt-2 sm:block hidden">
                                 <span className="text-sm text-gray-600 inline-flex items-center gap-2">
-                                    <MapPin className="w-4 h-4"/> {TourLocation}
+                                    <MapPin className="w-4 h-4"/> {meeting_place}
                                 </span>
                             </div>
                         </div>

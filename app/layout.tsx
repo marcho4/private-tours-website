@@ -47,7 +47,6 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      
       <body className={`scroll-smooth ${playfairDisplay.variable} ${labGrotesque.variable} antialiased bg-zinc-100`}>
         <Providers>
           {children}

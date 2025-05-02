@@ -1,5 +1,6 @@
 "use client"
 
+import { useQuery } from "@tanstack/react-query";
 import TourCard from "./TourCard";
 import { TourCardProps } from "./TourCard";
 import {
@@ -9,52 +10,77 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-// import { useEffect, useState } from "react";
-// import { useQuery } from '@tanstack/react-query';
 
+import { Skeleton } from "@/components/ui/skeleton";
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-const tours: TourCardProps[] = [
-    {
-        TourName: "Экскурсия по Москве",
-        TourDescription: "Обзорная экскурсия по Москве, которая включает в себя все основные достопримечательности города. Также я вам расскажу много интересных фактов о столице и ее центре.",
-        TourImage: "/moscow.jpg",
-        TourPrice: 8000,
-        TourDuration: 2,
-        TourLocation: "Москва",
-        TourRating: 4.5,
-        TourMaxPeople: 10
-    },
-    {
-        TourName: "Экскурсия по Центру",
-        TourDescription: "Экскурсия по красной площади и Кремлю. Здесь вы увидите самые знаковые места Москвы и познакомитесь с ее историей. Также я вам рассксажу много интересных фактов о столице и ее центре.",
-        TourImage: "/moscow2.jpg",
-        TourPrice: 10000,
-        TourDuration: 2,
-        TourLocation: "Москва",
-        TourRating: 5,
-        TourMaxPeople: 7
-    }
-]
-
-// const fetchTours = async () => {
-//     const response = await fetch('/api/tours');
-//     return response.json().then(data => data.data);
-// }
+const TourCardSkeleton = () => (
+    <div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
+        <Skeleton className="w-full h-64 rounded-t-lg" />
+        <div className="p-5">
+            <Skeleton className="h-8 w-3/4 mb-4" />
+            <Skeleton className="h-4 w-full mb-2" />
+            <Skeleton className="h-4 w-5/6 mb-6" />
+            <div className="flex justify-between items-center">
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-10 w-28 rounded-md" />
+            </div>
+        </div>
+    </div>
+);
 
 export default function Tours() {
-    // const { data } = useQuery({
-    //     queryKey: ['tours'],
-    //     queryFn: fetchTours,
-    // });
+    const { isPending, error, data } = useQuery({
+        queryKey: ['tours'],
+        queryFn: () =>
+            fetch("http://localhost:8080/tours").then((res) =>
+            res.json(),
+        ),
+    })
 
-    // const [api, setApi] = useState<any | null>(null);
-    // useEffect(() => {
-    //     if (!api) return;
-    // }, [api]);
+    const renderContent = () => {
+        if (isPending) {
+            return (
+                <CarouselContent className="h-[72vh] items-stretch">
+                    {[1, 2, 3].map((i) => (
+                        <CarouselItem key={i} className="w-full flex items-center justify-center">
+                            <TourCardSkeleton />
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+            );
+        }
+
+        if (error) {
+            return (
+                <div className="h-[72vh] flex flex-col items-center justify-center text-center p-6">
+                    <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
+                    <h2 className="text-xl font-semibold mb-2">Ошибка при загрузке данных</h2>
+                    <p className="text-gray-600 mb-4">{error.message}</p>
+                    <Button 
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                        onClick={() => window.location.reload()}
+                    >
+                        Попробовать снова
+                    </Button>
+                </div>
+            );
+        }
+
+        return (
+            <CarouselContent className="h-[72vh] items-stretch">                            
+                {data.data.map((tour: TourCardProps) => (
+                    <CarouselItem key={tour.id} className="w-full flex items-center justify-center">
+                        <TourCard {...tour} />
+                    </CarouselItem>
+                ))}
+            </CarouselContent>
+        );
+    };
 
     return (
         <div id="tours" className="flex relative flex-col items-center justify-center w-full bg-zinc-100">
-            {/* <div className="absolute inset-0 -bottom-1 bg-[url('/map.svg')] bg-repeat bg-[length:200px_200px] w-full opacity-5" /> */}
 
             <div className="flex flex-col items-center justify-center w-full max-w-6xl relative z-10">
                 <div className="flex w-full max-w-6xl justify-end mb-6">
@@ -65,18 +91,10 @@ export default function Tours() {
                 <Carousel
                     opts={{
                         loop: true,
-                        
                     }}
-                    // setApi={setApi}
                     className="w-full"
                 >
-                    <CarouselContent className="h-[72vh] items-stretch">                            
-                        {tours.map((tour) => (
-                            <CarouselItem key={tour.TourName} className="w-full flex items-center justify-center">
-                                <TourCard {...tour} />
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
+                    {renderContent()}
                     <div className="flex justify-center gap-4 mt-7 sm:mt-0">
                         <CarouselPrevious className="static translate-x-0 hover:bg-zinc-200 transition-colors" />
                         <CarouselNext className="static translate-x-0 hover:bg-zinc-200 transition-colors" />
