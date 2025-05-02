@@ -29,7 +29,7 @@ export default function Skills() {
                         <div className="col-span-1 md:col-span-1"></div>
                         <div className="col-span-1 md:hidden"></div>
                        
-                        <div className="col-span-2 md:col-span-1 hidden md:flex pt-10 justify-end sm:pr-10">
+                        <div className="col-span-2 md:col-span-1 hidden md:flex pt-10 justify-end sm:pr-10 animate-wiggle">
                             <svg width="71" height="37" viewBox="0 0 71 37" className="fill-yellow-400 hover:fill-custom-blue transition-colors duration-300 w-32 h-32">
                             <path d="M70.1951 27.9858C70.5877 28.3743 70.591 29.0074 70.2026 29.4L63.8724 35.7975C63.4839 36.1901 62.8508 36.1935 62.4582 35.805C62.0656 35.4166 62.0623 34.7834 62.4507 34.3908L68.0775 28.7041L62.3908 23.0773C61.9982 22.6888 61.9949 22.0557 62.3833 21.6631C62.7718 21.2705 63.4049 21.2672 63.7975 21.6556L70.1951 27.9858ZM2.50524 0.637024C5.61703 8.62547 14.3169 15.4493 26.4049 20.2633C38.4506 25.0604 53.6689 27.7804 69.4864 27.6967L69.497 29.6966C53.4631 29.7815 37.9844 27.0275 25.6649 22.1213C13.3877 17.232 4.0541 10.1233 0.641635 1.36297L2.50524 0.637024Z"></path>
                             </svg>
@@ -46,7 +46,7 @@ export default function Skills() {
                         </div>
 
 
-                        <div className="col-span-5 md:col-span-1 hidden md:flex pt-10 justify-start sm:pl-10">
+                        <div className="col-span-5 md:col-span-1 hidden md:flex pt-10 justify-start sm:pl-10 animate-wiggle">
                             <svg width="68" height="40" viewBox="0 0 68 40" className="fill-yellow-400 hover:fill-custom-blue transition-colors duration-300 w-32 h-32">
                             <path d="M0.249797 32.3388C-0.115376 32.7531 -0.0755367 33.385 0.33879 33.7502L7.09058 39.7011C7.50491 40.0663 8.13682 40.0264 8.50199 39.6121C8.86717 39.1978 8.82733 38.5659 8.41301 38.2007L2.41141 32.911L7.7011 26.9094C8.06628 26.4951 8.02644 25.8632 7.61211 25.498C7.19779 25.1328 6.56588 25.1727 6.2007 25.587L0.249797 32.3388ZM66.0486 0.692175C63.4254 8.79999 55.1655 16.139 43.4097 21.7213C31.6958 27.2837 16.6982 31.0083 0.937078 32.002L1.06292 33.998C17.0382 32.9908 32.2906 29.2153 44.2676 23.528C56.2027 17.8605 65.0746 10.2 67.9514 1.30781L66.0486 0.692175Z"></path>
                             </svg>
@@ -55,7 +55,7 @@ export default function Skills() {
                     
                         
 
-                        <div className="col-span-5 md:col-span-1 hidden md:flex pt-10 justify-end sm:pr-10">
+                        <div className="col-span-5 md:col-span-1 hidden md:flex pt-10 justify-end sm:pr-10 animate-wiggle">
                             <svg width="71" height="37" viewBox="0 0 71 37" className="fill-yellow-400 hover:fill-custom-blue transition-colors duration-300 w-32 h-32">
                             <path d="M70.1951 27.9858C70.5877 28.3743 70.591 29.0074 70.2026 29.4L63.8724 35.7975C63.4839 36.1901 62.8508 36.1935 62.4582 35.805C62.0656 35.4166 62.0623 34.7834 62.4507 34.3908L68.0775 28.7041L62.3908 23.0773C61.9982 22.6888 61.9949 22.0557 62.3833 21.6631C62.7718 21.2705 63.4049 21.2672 63.7975 21.6556L70.1951 27.9858ZM2.50524 0.637024C5.61703 8.62547 14.3169 15.4493 26.4049 20.2633C38.4506 25.0604 53.6689 27.7804 69.4864 27.6967L69.497 29.6966C53.4631 29.7815 37.9844 27.0275 25.6649 22.1213C13.3877 17.232 4.0541 10.1233 0.641635 1.36297L2.50524 0.637024Z"></path>
                             </svg>

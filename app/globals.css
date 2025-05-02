@@ -46,6 +46,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-wiggle: wiggle 5s ease-in-out infinite;
 
   --font-playfair: var(--font-playfair-display);
 
@@ -64,6 +65,17 @@
     }
     to {
       height: 0;
+    }
+  }
+
+  @keyframes wiggle {
+    from, to {
+       transform: rotate(0deg);
+       transform-origin: center;
+    }
+    50% { 
+      transform: rotate(5deg);
+      transform-origin: center;
     }
   }
 }
