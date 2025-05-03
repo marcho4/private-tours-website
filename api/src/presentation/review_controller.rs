@@ -49,7 +49,7 @@ pub async fn get_excursion_rating (
     review_service: ReviewServiceData
 ) -> impl Responder {
     match review_service.get_excursion_rating(excursion_id.into_inner()).await {
-        Ok(res) => HttpResponse::Created().json(json!({
+        Ok(res) => HttpResponse::Ok().json(json!({
             "message": "Successfully got rating",
             "data": res
         })),

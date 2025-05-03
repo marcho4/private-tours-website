@@ -10,7 +10,8 @@ import * as React from "react";
 import BookingDialog from "./BookingDialog";
 import { UUID } from "crypto";
 import DescriptionDialog from "./DescriptionDialog";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const formSchema = z.object({
     tourName: z.string().min(2, { message: "Выбор тура обязателен" }).max(50, { message: "Название тура должно быть не более 50 символов" }),
@@ -57,18 +58,45 @@ export default function TourCard({
 
     const hours = duration[0] / 60 / 60;
 
-    const renderRating = (id: string) => {
-        const { data: reviews } = useQuery({
-            queryKey: ['reviews'],
-            queryFn: () => fetch(`/api/reviews/${id}`).then(res => res.json())
-        })
+    const { data: reviews, isLoading: reviewsLoading, error: reviewsError } = useQuery({
+        queryKey: ['reviews', id],
+        queryFn: () => fetch(`/api/reviews/${id}`).then(res => res.json())
+    });
 
-        return reviews?.data.rating
+    const renderRating = () => {
+        if (reviewsLoading) return "Загрузка...";
+        if (reviewsError) return "Ошибка";
+        if (reviews?.data === -1) 
+            return "Нет отзывов";
+        return `${reviews?.data.rating}/5`;
     }
-    function onSubmit(values: FormSchema) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+
+    const bookingMutation = useMutation({
+        mutationFn: (values: z.infer<typeof formSchema>) => {
+            return fetch("/api/bookings", {
+                method: "POST",
+                body: JSON.stringify(values),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(async (response) => {
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || "Ошибка при бронировании");
+                }
+                return data;
+            });
+        },
+        onSuccess: () => {
+            toast.success("Экскурсия успешно забронирована");
+        },
+        onError: (error: Error) => {
+            toast.error(`Не удалось забронировать экскурсию: ${error.message}`);
+        }
+    });
+    
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        bookingMutation.mutate(values);
     }
 
     return (
@@ -94,7 +122,7 @@ export default function TourCard({
                     <span className=" inline-flex items-center justify-between w-full gap-2">{name} 
                         <div className="flex items-center gap-2 text-sm font-medium">
                                 <span className="text-amber-500">★</span>
-                                <span>4.5/5</span>
+                                <span>{renderRating()}</span>
                             </div>
                     </span>
                 </CardTitle>
@@ -123,7 +151,7 @@ export default function TourCard({
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-amber-500">★</span>
-                                <span>4.5/5</span>
+                                <span>{renderRating()}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-gray-600 inline-flex items-center gap-2">
