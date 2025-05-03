@@ -10,7 +10,7 @@ import * as React from "react";
 import BookingDialog from "./BookingDialog";
 import { UUID } from "crypto";
 import DescriptionDialog from "./DescriptionDialog";
-
+import { useQuery } from "@tanstack/react-query";
 
 const formSchema = z.object({
     tourName: z.string().min(2, { message: "Выбор тура обязателен" }).max(50, { message: "Название тура должно быть не более 50 символов" }),
@@ -57,6 +57,14 @@ export default function TourCard({
 
     const hours = duration[0] / 60 / 60;
 
+    const renderRating = (id: string) => {
+        const { data: reviews } = useQuery({
+            queryKey: ['reviews'],
+            queryFn: () => fetch(`/api/reviews/${id}`).then(res => res.json())
+        })
+
+        return reviews?.data.rating
+    }
     function onSubmit(values: FormSchema) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.

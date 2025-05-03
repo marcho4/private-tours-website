@@ -52,4 +52,4 @@ CREATE TABLE IF NOT EXISTS reviews (
        REFERENCES tours(id),
     CONSTRAINT fk_booking_id FOREIGN KEY (booking_id)
        REFERENCES bookings(id)
-);
+); 

@@ -11,7 +11,7 @@ export default function Footer() {
                 <div className="text-left">
                     connect@dernatalie.ru
                     <br />
-                    (+7) 916 067 00 24
+                    <Link href="tel:+79160670024" className="hover:underline">(+7) 916 067 00 24</Link>
                     <br />
                     <br />
                     Малая Полянка

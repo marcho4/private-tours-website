@@ -24,8 +24,7 @@ import * as React from "react"
 import { ru } from "date-fns/locale/ru"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-
-
+import { toast } from "sonner"
 
 const formSchema = z.object({
     tourName: z.string().min(2, { message: "Название тура должно быть не менее 2 символов" }).max(50, { message: "Название тура должно быть не более 50 символов" }),
@@ -41,6 +40,7 @@ const formSchema = z.object({
 
 
 export default function Booking() {
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -56,11 +56,21 @@ export default function Booking() {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-      }
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        let response = await fetch("https://85.208.110.41/api/bookings", {
+            method: "POST",
+            body: JSON.stringify(values),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        let data = await response.json()
+        if (response.ok) {
+            toast.success("Экскурсия успешно забронирована")
+        } else {
+            toast.error("Не удалось забронировать экскурсию: " + data.message)
+        }
+    }
 
 
     

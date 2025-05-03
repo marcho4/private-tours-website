@@ -39,12 +39,12 @@ export default function PhotoSection() {
                     </div>
                     <div className="flex flex-col mt-4 mb-2 space-y-2.5 w-full">
                         <Link href="#skills" className="w-full">
-                            <Button className="w-full text-black sm:text-base bg-gradient-to-br from-yellow-300 to-orange-400  transition-colors duration-200">
+                            <Button className="w-full text-black sm:text-base bg-gradient-to-br from-yellow-300 to-orange-400 hover:from-yellow-400  hover:to-orange-500 transition-colors duration-200">
                                 Узнать обо мне <UserSearch className="ml-2 h-4 w-4 sm:h-5 sm:w-5"/>
                             </Button>
                         </Link>
                         <Link href="#tours" className="w-full">
-                            <Button className="w-full text-black sm:text-base bg-gradient-to-br from-yellow-300 to-orange-400 transition-colors duration-200">
+                            <Button className="w-full text-black sm:text-base bg-gradient-to-br from-yellow-300 to-orange-400 hover:from-yellow-400  hover:to-orange-500 transition-colors duration-200">
                                 Забронировать экскурсию <CalendarDays className="ml-2 h-4 w-4 sm:h-5 sm:w-5"/>
                             </Button>
                         </Link>

@@ -34,7 +34,7 @@ export default function Tours() {
     const { isPending, error, data } = useQuery({
         queryKey: ['tours'],
         queryFn: () =>
-            fetch("http://localhost:8080/tours").then((res) =>
+            fetch("https://85.208.110.41/api/tours").then((res) =>
             res.json(),
         ),
     })

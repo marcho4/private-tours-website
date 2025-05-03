@@ -7,7 +7,8 @@ import PhotoSection from "./elements/PhotoSection";
 import Reviews from "./elements/Reviews";
 import Skills from "./elements/Skills";
 import Tours from "./elements/Tours";
-import React from "react";
+import CookieAccept from "./elements/CookieAccept";
+import { Toaster } from "sonner";
 
 export default function Home() {
     return (  
@@ -17,9 +18,10 @@ export default function Home() {
           <Skills />
           <Tours />
           <Reviews />
-          {/* <Booking /> */}
           <Faq />
           <Footer />  
+          <CookieAccept />
+          <Toaster />
       </div>
   );
 }

@@ -18,7 +18,7 @@ mod presentation;
 mod application;
 mod infrastructure;
 
-static MIGRATOR: Migrator = sqlx::migrate!("src/migrations");
+static MIGRATOR: Migrator = sqlx::migrate!("./src/migrations");
 
 
 #[actix_web::main]
@@ -58,7 +58,7 @@ async fn main() -> std::io::Result<()> {
 
     let pool = PgPoolOptions::new()
         .max_connections(1)
-        .connect(format!("postgres://{db_user}:{db_password}@0.0.0.0:5432/{db_name}").as_str()).await;
+        .connect(format!("postgres://{db_user}:{db_password}@postgres:5432/{db_name}").as_str()).await;
     
     let pool = match pool { 
         Ok(pool) => Arc::new(pool),
@@ -85,6 +85,11 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Cors::default()
                 .allowed_origin("http://localhost:3000")
+                .allowed_origin("https://localhost:3000")
+                .allowed_origin("http://85.208.110.41:3000")
+                .allowed_origin("https://85.208.110.41:3000")
+                .allowed_origin("https://85.208.110.41")
+                .allowed_origin("http://85.208.110.41")
                 .allow_any_header()
                 .allow_any_method()
                 .supports_credentials()

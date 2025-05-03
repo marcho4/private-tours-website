@@ -1,4 +1,4 @@
-
+"use client"
 
 import {
     Accordion,
@@ -18,7 +18,7 @@ export default function Faq() {
                 <AccordionItem value="item-1">
                     <AccordionTrigger className="sm:text-lg">Нужно ли вносить предоплату?</AccordionTrigger>
                     <AccordionContent>
-                    Да, предоплата составляет 50% от стоимости тура для уверенности в том, что вы придете на экскурсию.
+                        Да, предоплата составляет 50% от стоимости тура для уверенности в том, что вы придете на экскурсию.
                     </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
@@ -54,7 +54,7 @@ export default function Faq() {
                 <AccordionItem value="item-7">  
                     <AccordionTrigger className="sm:text-lg">Можно ли предварительно пообщаться с экскурсоводом?</AccordionTrigger>
                     <AccordionContent>
-                        Да, со мной можно связаться по номеру <a href="tel:+79161234567" className="text-blue-600 hover:underline">+7(916)123-45-67</a> или <a href="https://wa.me/79161234567" className="text-green-600 hover:underline">написать в WhatsApp</a>
+                        Да, со мной можно связаться по номеру <a href="tel:+79160670024" className="text-blue-600 hover:underline">+7(916)067-00-24</a> или <a href="https://wa.me/79160670024" className="text-green-600 hover:underline">написать в WhatsApp</a>
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>

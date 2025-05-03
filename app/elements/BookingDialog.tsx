@@ -57,7 +57,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
 
     const { data: toursData, isPending: isToursPending, error: toursError } = useQuery({
         queryKey: ['toursBooking'],
-        queryFn: () => fetch('http://localhost:8080/tours')
+        queryFn: () => fetch('https://85.208.110.41/api/tours')
             .then((res) => res.json())
             .then((json) => json.data),
     });
@@ -76,7 +76,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
 
     const { data: allTimeslotsData, isPending: isAllTimeslotsPending } = useQuery({
         queryKey: ['timeslots'],
-        queryFn: () => fetch('http://localhost:8080/timeslots')
+        queryFn: () => fetch('https://85.208.110.41/api/timeslots')
             .then((res) => res.json())
             .then((json) => {
                 console.log("Ответ от /timeslots:", json);
@@ -102,7 +102,7 @@ export default function BookingDialog({onSubmit}: {onSubmit: (values: z.infer<ty
     const { data: timeslotsData, isPending: isTimeslotsPending, error: timeslotsError } = useQuery({
         queryKey: ['timeslots', selectedDate],
         queryFn: () => fetch(
-            `http://localhost:8080/timeslots?date=${formatDate(selectedDate, 'yyyy-MM-dd')}`
+            `https://85.208.110.41/api/timeslots?date=${formatDate(selectedDate, 'yyyy-MM-dd')}`
         ).then((res) => res.json()),
     });
 

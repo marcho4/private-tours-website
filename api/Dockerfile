@@ -1,24 +1,31 @@
-FROM rust:1-slim-bookworm
-
+FROM lukemathwalker/cargo-chef:latest-rust-1 AS chef
 WORKDIR /app
 
-# Настраиваем российские зеркала
-RUN echo "deb http://mirror.yandex.ru/debian bookworm main" > /etc/apt/sources.list.d/mirror.list
+FROM chef AS planner
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
 
-# Устанавливаем необходимые зависимости
+FROM chef AS builder
+COPY --from=planner /app/recipe.json recipe.json
 RUN apt-get update && \
-    apt-get install -y libssl-dev pkg-config && \
+    apt-get install -y cmake pkg-config libssl-dev && \
+    rm -rf /var/lib/apt/lists/*
+RUN cargo chef cook --release --recipe-path recipe.json
+COPY . .
+RUN cargo build --release --bin api
+
+FROM debian:bookworm-slim AS runtime
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y libssl3 ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# Копируем код
-COPY . .
+COPY --from=builder /app/target/release/api /app/api
+COPY --from=builder /app/src/migrations/20230101000000_initial_schema.sql /app/src/migrations/20230101000000_initial_schema.sql
+COPY --from=builder /app/cert.pem /app/cert.pem
+COPY --from=builder /app/key.pem /app/key.pem
 
-# Собираем приложение
-RUN cargo build --release
-
-# Экспонируем порты
 EXPOSE 8080
 EXPOSE 8443
-
-# Запускаем
-CMD ["./target/release/api"]
+CMD ["./api"]

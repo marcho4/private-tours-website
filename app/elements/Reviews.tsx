@@ -35,7 +35,7 @@ export default function Reviews() {
     const { isPending, error, data } = useQuery({
         queryKey: ['reviews'],
         queryFn: () =>
-            fetch("http://localhost:8080/reviews").then((res) =>
+            fetch("https://85.208.110.41/api/reviews").then((res) =>
             res.json()),
     })
 
