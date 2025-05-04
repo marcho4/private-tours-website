@@ -13,6 +13,11 @@ services:
       always
     networks:
       - main
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${DATABASE_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   api:
     build:
@@ -26,7 +31,9 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
 
   nginx:
     image: nginx:latest
@@ -40,20 +47,28 @@ services:
       always
     networks:
       - main
+    depends_on:
+      - frontend
+      - api
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NODE_ENV=production
+        - NEXT_PUBLIC_API_URL=${API_URL}
     ports:
       - "3000:3000"
-    volumes:
-      - ./:/app
-      - /app/node_modules
-      - /app/.next
+    environment:
+      - NODE_ENV=production
     networks:
       - main
-    restart: always
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
 networks:
   main:

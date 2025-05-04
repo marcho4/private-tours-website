@@ -60,7 +60,7 @@ export default function TourCard({
 
     const { data: reviews, isLoading: reviewsLoading, error: reviewsError } = useQuery({
         queryKey: ['reviews', id],
-        queryFn: () => fetch(`/api/reviews/${id}`).then(res => res.json())
+        queryFn: () => fetch(`/api/reviews/rating/${id}`).then(res => res.json())
     });
 
     const renderRating = () => {
@@ -73,9 +73,17 @@ export default function TourCard({
 
     const bookingMutation = useMutation({
         mutationFn: (values: z.infer<typeof formSchema>) => {
-            return fetch("/api/bookings", {
+            let bookingData = {
+                ...values,
+                persons: values.numberOfPeople,
+                timeslot_id: values.timeslot,
+                excursion_id: values.tourName,
+                phone_number: values.phone
+            };
+
+            return fetch("/api/booking", {
                 method: "POST",
-                body: JSON.stringify(values),
+                body: JSON.stringify(bookingData),
                 headers: {
                     "Content-Type": "application/json"
                 }

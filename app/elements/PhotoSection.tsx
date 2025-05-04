@@ -30,7 +30,7 @@ export default function PhotoSection() {
             </div>
             <div className="sm:w-5/12 flex flex-col justify-center">
                 <div className="backdrop-blur-md py-6 sm:py-10 px-4 sm:px-5 rounded-3xl bg-white/30 max-w-[300px] sm:max-w-full">
-                    <div className="text-5xl sm:text-3xl md:text-4xl lg:text-6xl mb-4 sm:mb-5 text-shadow-2xs
+                    <div className="text-5xl sm:text-3xl md:text-4xl lg:text-6xl mb-4 sm:mb-5
                         font-semibold text-center sm:text-left hyphens-auto">
                         Наталья Дергилёва
                     </div>
