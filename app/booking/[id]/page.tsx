@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,7 +9,7 @@ import { useParams } from "next/navigation";
 
 const getTimeslotInfo = async (timeslotId: string) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/timeslot?id=${timeslotId}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/timeslot?id=${timeslotId}`)
         return res.json().then(data => data.data)
     } catch (error) {
         throw new Error("Failed to fetch timeslot info")
@@ -16,7 +18,7 @@ const getTimeslotInfo = async (timeslotId: string) => {
 
 const getExcursionInfo = async (excursionId: string) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tour/${excursionId}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tour/${excursionId}`)
         return res.json().then(data => data.data)
     } catch (error) {
         throw new Error("Failed to fetch excursion info")
@@ -26,7 +28,7 @@ const getExcursionInfo = async (excursionId: string) => {
 
 const getBooking = async (id: string) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/booking/${id}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/booking/${id}`)
         let data = await res.json()
         
         const timeslotId = data.data.timeslot_id;
