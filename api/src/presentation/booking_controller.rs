@@ -4,7 +4,7 @@ use actix_web::{delete, post, Responder, web};
 use uuid::Uuid;
 use crate::application::bookings_service::BookingService;
 use crate::infrastructure::bookings_repo::BookingsRepo;
-use crate::presentation::dto::ApiResponse;
+use crate::presentation::dto::{ApiResponse, BookingInfoDTO};
 use crate::presentation::dto::CreateBookingDto;
 use crate::presentation::dto::CancelBookingDto;
 
@@ -62,9 +62,37 @@ pub async fn get_booking(
     let booking = booking_service.get_booking(id.into_inner()).await;
     match booking {
         Ok(booking) => {
-            HttpResponse::Ok().json(ApiResponse::<Booking>{
+            HttpResponse::Ok().json(ApiResponse::<BookingInfoDTO>{
                 message: "Booking retrieved successfully".to_string(),
-                data: Some(booking)
+                data: Some(BookingInfoDTO {
+                    id: booking.id,
+                    name: booking.name,
+                    surname: booking.surname,
+                    persons: booking.persons,
+                    timeslot_id: booking.timeslot_id,
+                    excursion_id: booking.excursion_id,
+                })
+            })
+        },
+        Err(e) => {
+            HttpResponse::BadRequest().json(ApiResponse::<()>{
+                message: e.to_string(),
+                data: None
+            })
+        }
+    }
+}
+
+#[get("/bookings")]
+pub async fn get_bookings(
+    booking_service: web::Data<BookingService<BookingsRepo>>,
+) -> impl Responder {
+    let bookings = booking_service.get_all_bookings().await;
+    match bookings {
+        Ok(bookings) => {
+            HttpResponse::Ok().json(ApiResponse::<Vec<Booking>>{
+                message: "Booking retrieved successfully".to_string(),
+                data: Some(bookings)
             })
         },
         Err(e) => {

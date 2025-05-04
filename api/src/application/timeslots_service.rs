@@ -18,8 +18,8 @@ impl TimeslotsService<TimeSlotRepo> {
         }
     }
     
-    pub async fn get_timeslots_by_date(&self, date: NaiveDate) -> Result<Vec<TimeSlot>, AppError> {
-        self.repo.get_time_slots_by_date(date).await
+    pub async fn get_timeslots_by_date(&self, date: NaiveDate, duration: Option<i32>) -> Result<Vec<TimeSlot>, AppError> {
+        self.repo.get_time_slots_by_date(date, duration).await
     }
     
     pub async fn get_timeslots(&self) -> Result<Vec<TimeSlot>, AppError> {

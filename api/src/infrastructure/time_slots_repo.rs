@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use chrono::{NaiveDate, NaiveTime};
+use chrono::{Duration, NaiveDate, NaiveTime};
 use sqlx::{Pool, Postgres, Transaction};
 use uuid::Uuid;
 use crate::domain::error::AppError;
@@ -28,9 +28,38 @@ impl ITimeSlotsRepo for TimeSlotRepo {
         Ok(vec)   
     }
 
-    async fn get_time_slots_by_date(&self, date: NaiveDate) -> Result<Vec<TimeSlot>, AppError> {
+    async fn get_time_slots_by_date(&self, date: NaiveDate, duration: Option<i32>) -> Result<Vec<TimeSlot>, AppError> {
         let time_slots = self.get_time_slots().await?;
-        let vec = time_slots.into_iter().filter(|slot| slot.day == date).collect();
+        let vec: Vec<TimeSlot> = time_slots.into_iter().filter(|slot| slot.day == date).collect();
+        
+        if let Some(duration) = duration {
+            let duration = Duration::new(duration as i64, 0).unwrap();
+            let mut ans: Vec<&TimeSlot> = vec![];
+            
+            let mut prev_is_booked = false;
+            let mut prev_booked_slot: &TimeSlot = &vec[vec.len() - 1];
+            
+            let mut i: i32 = (vec.len() - 1) as i32;
+            
+            while i >= 0 {
+                let slot = vec.get(i as usize).unwrap();
+                if slot.reserved == false && prev_is_booked == false {
+                    i -= 1;
+                    ans.push(slot);
+                } else if slot.reserved == true && prev_is_booked == true {
+                    i -= 1;
+                } else if slot.reserved == true && prev_is_booked == false {
+                    prev_is_booked = true;
+                    prev_booked_slot = slot;
+                    i -= 1;
+                } else if slot.time_from <= prev_booked_slot.time_from - duration {
+                    ans.push(slot);
+                    prev_is_booked = false;
+                    i -= 1;
+                }
+                
+            }
+        }
         Ok(vec)  
     }
 

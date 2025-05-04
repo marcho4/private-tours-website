@@ -63,3 +63,12 @@ pub struct CreateTimeSlotsDTO {
     pub time_to: NaiveTime
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct BookingInfoDTO {
+    pub id: Uuid,
+    pub persons: i16,
+    pub name: String,
+    pub surname: String,
+    pub timeslot_id: Uuid,
+    pub excursion_id: Uuid,
+}

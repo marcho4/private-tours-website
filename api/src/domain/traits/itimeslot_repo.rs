@@ -10,7 +10,7 @@ pub trait ITimeSlotsRepo {
 
     async fn get_time_slot(&self, uuid: Uuid) -> Result<TimeSlot, AppError>;
     async fn get_time_slots(&self) -> Result<Vec<TimeSlot>, AppError>;
-    async fn get_time_slots_by_date(&self, date: NaiveDate) -> Result<Vec<TimeSlot>, AppError>;
+    async fn get_time_slots_by_date(&self, date: NaiveDate, duration: Option<i32>) -> Result<Vec<TimeSlot>, AppError>;
 
     async fn add_time_slot(&self,
                            day: NaiveDate,
@@ -27,4 +27,5 @@ pub trait ITimeSlotsRepo {
         tour_id: Uuid,
         tx: &mut Transaction<'a, Postgres>,
     ) -> Result<(), AppError>;
+
 }

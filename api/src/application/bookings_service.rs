@@ -40,7 +40,7 @@ impl BookingService<BookingsRepo> {
                                 additional_info: String
     ) ->Result<Booking, AppError> {
         let timeslot_info = self.timeslot_repo.get_time_slot(timeslot_id.clone()).await?;
-        let timeslots = self.timeslot_repo.get_time_slots_by_date(timeslot_info.day).await?;
+        let timeslots = self.timeslot_repo.get_time_slots_by_date(timeslot_info.day, None).await?;
         let tour = self.tours_repo.get_tour_by_id(excursion_id.clone()).await?;
 
         if timeslot_info.reserved {
@@ -117,7 +117,7 @@ impl BookingService<BookingsRepo> {
         
         let timeslot = self.timeslot_repo.get_time_slot(booking.timeslot_id.clone()).await?;
         let mut timeslots_to_unreserve = vec![timeslot.clone()];
-        let timeslots = self.timeslot_repo.get_time_slots_by_date(timeslot.day.clone()).await?;
+        let timeslots = self.timeslot_repo.get_time_slots_by_date(timeslot.day.clone(), None).await?;
          
         for timeslot in timeslots.iter() {
             if timeslot.time_from < timeslot.time_from + tour.duration && timeslot.time_from > timeslot.time_from {
@@ -137,6 +137,10 @@ impl BookingService<BookingsRepo> {
     
     pub async fn get_booking(&self, uuid: Uuid) -> Result<Booking, AppError> {
         self.repo.get_booking_details(uuid).await
+    }
+    
+    pub async fn get_all_bookings(&self) -> Result<Vec<Booking>, AppError> {    
+        self.repo.get_all_bookings().await
     }
 }
 
